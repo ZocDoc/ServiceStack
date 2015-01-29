@@ -49,6 +49,10 @@ namespace ServiceStack.ServiceClient.Web
             rsMap = new Dictionary<string, string>(rsMap, StringExtensions.InvariantComparerIgnoreCase());
             rsMap.TryGetValue("ErrorCode", out errorCode);
             rsMap.TryGetValue("Message", out errorMessage);
+            using (var sw = new System.IO.StreamWriter(@"c:\temp\log.20150123", true))
+            {
+                //sw.WriteLine("DAC errorMessage 3");
+            }
             rsMap.TryGetValue("StackTrace", out serverStackTrace);
             rsMap.TryGetValue("RequestTypeName", out requestTypeName);
             rsMap.TryGetValue("RequestContents", out requestContents);
