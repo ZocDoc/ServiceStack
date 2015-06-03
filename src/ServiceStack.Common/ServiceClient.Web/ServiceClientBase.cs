@@ -118,6 +118,7 @@ namespace ServiceStack.ServiceClient.Web
             };
             this.CookieContainer = new CookieContainer();
             this.StoreCookies = true; //leave
+            this.Expect100ContinueOverride = null;
 #if NETFX_CORE || WINDOWS_PHONE || SILVERLIGHT
             this.Headers = new Dictionary<string, string>();
 #else
@@ -320,6 +321,12 @@ namespace ServiceStack.ServiceClient.Web
             get { return storeCookies; }
             set { asyncClient.StoreCookies = storeCookies = value; }
         }
+
+        /// <summary>
+        /// Optionally specifies a value to use for HttpWebRequest.Expect100Continue, overriding the default.
+        /// </summary>
+        public bool? Expect100ContinueOverride { get; set; }
+
 
         private CookieContainer _cookieContainer;
         public CookieContainer CookieContainer
@@ -628,6 +635,10 @@ namespace ServiceStack.ServiceClient.Web
             {
                 client.Accept = Accept;
                 client.Method = httpMethod;
+                if (Expect100ContinueOverride.HasValue)
+                {
+                    client.ServicePoint.Expect100Continue = Expect100ContinueOverride.Value;
+                }
                 client.Headers.Add(Headers);
 
                 if (Proxy != null) client.Proxy = Proxy;
