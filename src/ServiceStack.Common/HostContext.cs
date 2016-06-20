@@ -66,20 +66,18 @@ namespace ServiceStack.Common
     {
         public const string HashId = "__disposables";
 
-        List<WeakReference> disposables = new List<WeakReference>();
+        List<IDisposable> disposables = new List<IDisposable>();
 
         public void Add(IDisposable instance)
         {
-            disposables.Add(new WeakReference(instance));
+            disposables.Add(instance);
         }
 
         public void Dispose()
         {
-            foreach (var wr in disposables)
+            foreach (var d in disposables)
             {
-                var disposable = (IDisposable)wr.Target;
-                if (wr.IsAlive)
-                    disposable.Dispose();
+                d.Dispose();
             }
         }
     }
